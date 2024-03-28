@@ -2,3 +2,6 @@
 *__pycache__
 response/*
 apikey.txt
+responses.parquet
+*.parquet
+api_testing.ipynb

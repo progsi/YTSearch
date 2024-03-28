@@ -30,7 +30,7 @@ def search_by_query(api_key: str, query: str, max_results: int = 10):
 
         # write to disk
         store_dir = "response"
-        identifier = query
+        identifier = query.replace("-", " ").replace("_", " ")
         filepath = get_store_filepath(store_dir, identifier, max_results)
         write_json_to_disk(search_response, filepath)
 

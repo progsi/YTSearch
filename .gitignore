@@ -1,0 +1,4 @@
+.vscode
+*__pycache__
+response/*
+apikey.txt

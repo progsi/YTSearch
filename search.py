@@ -2,16 +2,17 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from utils import get_store_filepath, write_json_to_disk
 import os
+import argparse
 
 
-def search_by_query(api_key: str, query: str, max_results: int = 10):
+def search_by_query(api_key: str, query: str, max_results: int):
     """
     Search for YouTube videos based on a query string.
 
     Args:
     - api_key (str): Your YouTube Data API key.
     - query (str): The search query.
-    - max_results (int): Maximum number of results to return (default is 10).
+    - max_results (int): Maximum number of results to return (default is 50).
 
     Returns:
     - List of dictionaries, each representing a video, with keys:
@@ -41,7 +42,7 @@ def search_by_query(api_key: str, query: str, max_results: int = 10):
         return None
     
 
-def search_by_song(api_key: str, song_title: str, expansion: str, max_results: int = 10):
+def search_by_song(api_key: str, song_title: str, expansion: str, max_results: int = 50):
 
     q = ' '.join((song_title, expansion)).strip().lower()
 
@@ -69,7 +70,22 @@ def get_api_key(file_path='apikey.txt'):
         return None
 
 
-if __name__ == "__main__":
+def parse_args():
+
+    parser = argparse.ArgumentParser(description="Search on YouTube given a song title and an expansion...")
+    parser.add_argument("-q", type=str, help="The search query.")
+    parser.add_argument("-m", type=int, help="Maximum search results to return per query.", default=50)
+    return parser.parse_args()
+
+def main():
+
+    args = parse_args()
+    q = args.q
+    m = args.m
     api_key = get_api_key()
-    response = search_by_song(api_key=api_key, song_title="canto das tres racas", 
-                                 expansion="reaction", max_results=50)
+
+    search_by_query(api_key=api_key, query=q, max_results=m )
+
+
+if __name__ == "__main__":
+    main()

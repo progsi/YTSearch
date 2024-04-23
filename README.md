@@ -1,4 +1,4 @@
-# YTMusicCrawler
+# YTSearch
 Little CLI tool for searching on YouTube using the official API.
 ## Requirements
 Your api key in `api_key.txt`.

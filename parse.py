@@ -3,7 +3,6 @@ import os
 from datetime import datetime
 import json
 
-
 def parse_filename(filename: str):
     """
     Parse filename into timestamp, query, and number.

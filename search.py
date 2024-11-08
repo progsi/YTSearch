@@ -43,7 +43,12 @@ class YTSearch:
             filepath = get_store_filepath(store_dir, identifier, max_results)
             write_json_to_disk(search_response, filepath)
 
-            return search_response
+            return {
+                'query': query,
+                'max_results': max_results,
+                'filepath': filepath,
+                'response': search_response
+            }
 
         except HttpError as e:
             print('An HTTP error %d occurred:\n%s' % (e.resp.status, e.content))

@@ -53,3 +53,7 @@ def sanitize_filename(filename):
     if not cleaned_filename:
         cleaned_filename = 'untitled'
     return cleaned_filename
+
+def is_valid_response(r: dict) -> bool:
+    KIND_LABEL = "youtube#searchListResponse"
+    return r.get("kind") == KIND_LABEL

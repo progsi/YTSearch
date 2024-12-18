@@ -1,18 +1,20 @@
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from utils import get_store_filepath, write_json_to_disk
+from utils import get_store_filepath, write_json_to_disk, is_valid_response
 import os
 import argparse
 
 class YTSearch:
-    def __init__(self, filepath_api_key: str, output_dir: str = "."):
+    def __init__(self, filepath_api_key: str, output_dir: str = ".", 
+                 write_always: bool = False):
         self.api_key = get_api_key(filepath_api_key)
         self.output_dir = output_dir
+        self.write_always = write_always
 
     def set_output_dir(self, output_dir: str):
         os.makedirs(output_dir, exist_ok=True)
         self.output_dir = output_dir
-
+    
     def search_by_query(self, query: str, max_results: int):
         """
         Search for YouTube videos based on a query string.
@@ -41,7 +43,9 @@ class YTSearch:
             store_dir = self.output_dir
             identifier = query.replace("-", " ").replace("_", " ")
             filepath = get_store_filepath(store_dir, identifier, max_results)
-            write_json_to_disk(search_response, filepath)
+            
+            if self.write_always or is_valid_response(search_response):
+                write_json_to_disk(search_response, filepath)
 
             return {
                 'query': query,
@@ -80,7 +84,7 @@ def parse_args():
     parser.add_argument("-m", type=int, help="Maximum search results to return per query.", default=50)
     parser.add_argument("--api_key", type=str, help="Filepath to apikey of YouTube Data API", default="apikey.txt")
     parser.add_argument("--output_dir", type=str, help="Output directory", default=".")
-
+    parser.add_argument("--write_always", action="store_true", help="Write to disk even if response is invalid")
     return parser.parse_args()
 
 def main():
@@ -89,7 +93,7 @@ def main():
     q = args.q
     m = args.m
 
-    ytsearch = YTSearch(args.api_key, args.output_dir)
+    ytsearch = YTSearch(args.api_key, args.output_dir, args.write_always)
     ytsearch.search_by_query(query=q, max_results=m )
 
 if __name__ == "__main__":

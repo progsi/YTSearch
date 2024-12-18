@@ -56,4 +56,4 @@ def sanitize_filename(filename):
 
 def is_valid_response(r: dict) -> bool:
     KIND_LABEL = "youtube#searchListResponse"
-    return r.get("kind") == KIND_LABEL
+    return r.get("kind") == KIND_LABEL or r.get("response").get("kind") == KIND_LABEL
